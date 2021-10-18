@@ -1,14 +1,65 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "properties": {
-    "database": {
-      "title": "Database file",
+  "definitions": {
+    "server": {
+      "title": "Server Name",
+      "type": "string",
+      "minLength": 1
+    },
+    "port": {
+      "title": "Server Port",
+      "type": "number",
+      "minLength": 1,
+      "default": 1025
+    },
+    "username": {
+      "title": "Username",
+      "type": "string",
+      "minLength": 1
+    },
+    "usePassword": {
+      "title": "Use Password",
+      "type": "string",
+      "enum": ["Ask on Connect", "Save Password"],
+      "default": "Ask on Connect"
+    },
+    "password": {
+      "title": "Password",
       "type": "string",
       "minLength": 1
     }
   },
-  "required": [
-    "database"
-  ]
+  "properties": {
+    "logmech": {
+      "title": "Login Mechanism",
+      "type": "string",
+      "minLength": 1,
+      "enum": ["TD2", "LDAP", "KRB5", "TDNEGO"],
+      "default": "TD2"
+    },
+    "server": { "$ref": "#/definitions/server" },
+    "port": { "$ref": "#/definitions/port" },
+    "username": { "$ref": "#/definitions/username" },
+    "usePassword": { "$ref": "#/definitions/usePassword" }
+  },
+  "dependencies": {
+    "usePassword": {
+      "oneOf": [
+        {
+          "properties": {
+            "usePassword": { "enum": ["Ask on Connect"] },
+            "askForPassword": { "type": "boolean", "default": true }
+          }
+        },
+        {
+          "properties": {
+            "usePassword": { "enum": ["Save Password"] },
+            "password": { "$ref": "#/definitions/password" }
+          }
+        }
+      ]
+    }
+  },
+  "required": ["username", "server", "port"]
 }

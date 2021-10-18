@@ -1,4 +1,18 @@
 {
-  "ui:order": ["database"],
-  "database": { "ui:widget": "file" }
+  "ui:order": [
+    "server",
+    "port",
+    "username",
+    "usePassword",
+    "password",
+    "tdsqloptions",
+    "askForPassword"
+  ],
+  "password": { "ui:widget": "password" },
+  "askForPassword": { "ui:widget": "hidden" },
+  "tdsqloptions": {
+    "logmech": {
+      "ui:help": "The login mechanism used to connect to Teradata server"
+    }
+  }
 }

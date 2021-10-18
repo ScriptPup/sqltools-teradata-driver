@@ -1,23 +1,31 @@
 {
-  "name": "driver-template",
-  "displayName": "Driver Template",
-  "description": "Driver Template to be used as base for new VSCode SQLTools drivers",
-  "version": "0.0.1",
+  "name": "sqltools-teradata-driver",
+  "displayName": "SQLTools Teradata Driver",
+  "description": "VSCode SQLTools teradata driver",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.42.0"
   },
-  "publisher": "mtxr",
+  "publisher": "ScriptPup",
   "license": "MIT",
-  "repository": {},
-  "bugs": {},
+  "repository": {
+    "url": "https://github.com/ScriptPup/sqltools-teradata-driver/"
+  },
+  "bugs": {
+    "type": "git",
+    "url": "https://github.com/ScriptPup/sqltools-teradata-driver/issues/"
+  },
+  "icon": "icons/package-icon.png",
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "package": "vsce package",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
   "keywords": [
-    "driver-template",
-    "sqltools-driver"
+    "teradata",
+    "sqltools-driver",
+    "sql"
   ],
   "categories": [
     "Programming Languages",
@@ -37,6 +45,12 @@
   "dependencies": {
     "@sqltools/base-driver": "latest",
     "@sqltools/types": "latest",
+    "@teradataprebuilt/nativelib-win32": "^1.0.0-beta.1",
+    "ffi-napi": "^4.0.3",
+    "keytar": "^7.7.0",
+    "node-gyp": "^8.2.0",
+    "ref-array-di": "^1.2.2",
+    "teradata-nodejs-driver": "^1.0.0-rc.2",
     "uuid": "^7.0.2"
   },
   "devDependencies": {

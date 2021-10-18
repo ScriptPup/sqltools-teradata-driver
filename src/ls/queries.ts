@@ -1,83 +1,138 @@
-import { IBaseQueries, ContextValue } from '@sqltools/types';
-import queryFactory from '@sqltools/base-driver/dist/lib/factory';
+/** @format */
+
+import { IBaseQueries, ContextValue } from "@sqltools/types";
+import queryFactory from "@sqltools/base-driver/dist/lib/factory";
+import { helper_ColTypeCASE } from "./cases";
+import { splitSearch } from "./objectCache";
 
 /** write your queries here go fetch desired data. This queries are just examples copied from SQLite driver */
 
-const describeTable: IBaseQueries['describeTable'] = queryFactory`
-  SELECT C.*
-  FROM pragma_table_info('${p => p.label}') AS C
-  ORDER BY C.cid ASC
+const fetchDatabases: IBaseQueries["fetchDatabases"] = queryFactory`
+  SELECT 
+    DatabaseName AS "label"
+    ,DatabaseName as "name"
+    ,DatabaseName AS "database"
+    ,'${ContextValue.DATABASE}' AS "type"
+    ,'database' AS "detail"
+    ,'database' AS "iconId"
+  FROM DBC.DatabasesV
+  WHERE DBKind = 'D';
 `;
 
-const fetchColumns: IBaseQueries['fetchColumns'] = queryFactory`
-SELECT C.name AS label,
-  C.*,
-  C.type AS dataType,
-  C."notnull" AS isNullable,
-  C.pk AS isPk,
-  '${ContextValue.COLUMN}' as type
-FROM pragma_table_info('${p => p.label}') AS C
-ORDER BY cid ASC
+const describeTable: IBaseQueries["describeTable"] = queryFactory`
+  HELP TABLE '${(p) => p.label}';
 `;
 
-const fetchRecords: IBaseQueries['fetchRecords'] = queryFactory`
-SELECT *
-FROM ${p => (p.table.label || p.table)}
-LIMIT ${p => p.limit || 50}
-OFFSET ${p => p.offset || 0};
+// NOTE > Getting PK value for TD requires joining to indexes table
+//      The additional join may cause performance issues in large deployments
+//      leaving it out for now.
+const fetchColumns: IBaseQueries["fetchColumns"] = queryFactory`
+SELECT 
+  c.ColumnName as "label"
+  ,${helper_ColTypeCASE} AS "dataType"
+  ,C.Nullable AS "isNullable"
+  ,NULL AS "isPk" 
+  ,'${ContextValue.COLUMN}' as "type"
+FROM dbc.columnsV AS C 
+WHERE tablename = '${(p) => p.label}'
+ORDER BY ColumnId ASC;
 `;
 
-const countRecords: IBaseQueries['countRecords'] = queryFactory`
+const fetchRecords: IBaseQueries["fetchRecords"] = queryFactory`
+SELECT TOP ${(p) => p.limit || 50}
+*
+FROM ${(p) => p.table.label || p.table};
+`;
+
+const countRecords: IBaseQueries["countRecords"] = queryFactory`
 SELECT count(1) AS total
-FROM ${p => (p.table.label || p.table)};
+FROM ${(p) => p.table.label || p.table};
 `;
 
-const fetchTablesAndViews = (type: ContextValue, tableType = 'table'): IBaseQueries['fetchTables'] => queryFactory`
-SELECT name AS label,
-  '${type}' AS type
-FROM sqlite_master
-WHERE LOWER(type) LIKE '${tableType.toLowerCase()}'
-  AND name NOT LIKE 'sqlite_%'
-ORDER BY name
+const fetchTablesAndViews = (
+  type: ContextValue,
+  tableType = "T"
+): IBaseQueries["fetchTables"] => queryFactory`
+SELECT 
+  TableName AS "label"
+  ,DataBaseName AS "parent"
+  ,'${type}' AS "type"
+FROM dbc.tablesV
+WHERE 
+  TableKind = '${tableType}'
+  AND DataBaseName = '${(p) => p.database}'
+;
 `;
 
-const fetchTables: IBaseQueries['fetchTables'] = fetchTablesAndViews(ContextValue.TABLE);
-const fetchViews: IBaseQueries['fetchTables'] = fetchTablesAndViews(ContextValue.VIEW , 'view');
+const fetchTables: IBaseQueries["fetchTables"] = fetchTablesAndViews(
+  ContextValue.TABLE
+);
+const fetchViews: IBaseQueries["fetchTables"] = fetchTablesAndViews(
+  ContextValue.VIEW,
+  "V"
+);
 
-const searchTables: IBaseQueries['searchTables'] = queryFactory`
-SELECT name AS label,
-  type
-FROM sqlite_master
-${p => p.search ? `WHERE LOWER(name) LIKE '%${p.search.toLowerCase()}%'` : ''}
-ORDER BY name
+const searchTables: IBaseQueries["searchTables"] = queryFactory`
+SELECT 
+  TableName AS "label"
+  ,DataBaseName AS "parent"
+FROM dbc.tablesV
+WHERE 
+  TableKind IN ('T','V')
+  AND DataBaseName = '${(p) =>
+    splitSearch(ContextValue.TABLE, p.search)["database"]}'
+;
+${(p) => {
+  console.log(p);
+  return "";
+}}
 `;
-const searchColumns: IBaseQueries['searchColumns'] = queryFactory`
-SELECT C.name AS label,
-  T.name AS "table",
-  C.type AS dataType,
-  C."notnull" AS isNullable,
-  C.pk AS isPk,
-  '${ContextValue.COLUMN}' as type
-FROM sqlite_master AS T
-LEFT OUTER JOIN pragma_table_info((T.name)) AS C ON 1 = 1
+// const searchTables: IBaseQueries["searchTables"] = queryFactory`
+// SELECT
+//   TableName AS "label"
+//   ,TableKind AS "type"
+// FROM dbc.tablesV
+// ${(p) => (p.search ? `WHERE TableName LIKE '%${p.search.toLowerCase()}%'` : "")}
+// ORDER BY TableName;
+// `;
+
+const searchColumns: IBaseQueries["searchColumns"] = queryFactory`
+SELECT TOP ${(p) => p.limit || 10}
+  c.ColumnName as "label"
+  ,c.TableName as "table"
+  ,${helper_ColTypeCASE} AS "dataType"
+  ,C.Nullable AS "isNullable"
+  ,NULL AS "isPk" 
+  ,'${ContextValue.COLUMN}' as "type"
+FROM dbc.columnsV AS C 
 WHERE 1 = 1
-${p => p.tables.filter(t => !!t.label).length
-  ? `AND LOWER(T.name) IN (${p.tables.filter(t => !!t.label).map(t => `'${t.label}'`.toLowerCase()).join(', ')})`
-  : ''
-}
-${p => p.search
-  ? `AND (
-    LOWER(T.name || '.' || C.name) LIKE '%${p.search.toLowerCase()}%'
-    OR LOWER(C.name) LIKE '%${p.search.toLowerCase()}%'
+${(p) => {
+  console.log(p);
+  return "";
+}}
+${(p) =>
+  p.tables.filter((t) => !!t.label).length
+    ? `AND c.TableName IN (${p.tables
+        .filter((t) => !!t.label)
+        .map((t) => `'${t.label}'`.toLowerCase())
+        .join(", ")})`
+    : ""}
+${(p) => {
+  const term = splitSearch(ContextValue.COLUMN, p.search.toLowerCase())[
+    "column"
+  ];
+  return p.search
+    ? `AND (
+    LOWER(c.ColumnName || '.' || c.TableName) LIKE '%${term}%'
+    OR LOWER(c.ColumnName) LIKE '%${term}%'
   )`
-  : ''
-}
-ORDER BY C.name ASC,
-  C.cid ASC
-LIMIT ${p => p.limit || 100}
+    : "";
+}}
+ORDER BY c.ColumnName ASC;
 `;
 
 export default {
+  fetchDatabases,
   describeTable,
   countRecords,
   fetchColumns,
@@ -85,5 +140,5 @@ export default {
   fetchTables,
   fetchViews,
   searchTables,
-  searchColumns
-}
+  searchColumns,
+};

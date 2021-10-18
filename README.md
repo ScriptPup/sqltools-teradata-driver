@@ -1,87 +1,28 @@
-# SQLTools Driver Template Repository
+# SQLTools Teradata Driver
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y487W9)
-[![Patreon](https://img.shields.io/badge/patreon-support-blue.svg?style=for-the-badge)](https://www.patreon.com/mteixeira)
-[![Paypal Donate](https://img.shields.io/badge/paypal-donate-blue.svg?style=for-the-badge)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RSMB6DGK238V8)
-[![VSCode.pro](https://img.shields.io/badge/Supported%20by-VSCode%20Power%20User%20Course%20%E2%86%92-gray.svg?colorA=655BE1&colorB=4F44D6&style=for-the-badge)](https://a.paddle.com/v2/click/16413/111711?link=1227)
+This package is part of vscode-sqltools extension.
 
-## Getting started with you new driver
+# Changelog
 
-Welcome, developer!
+## 0.1.0
 
-Let's get started with your new driver. I'm assuming you already know how to start extensions on VSCode.
-In case you dont', please take a look at https://code.visualstudio.com/api/get-started/your-first-extension before moving forward.
+- First working version
 
-### 1. Set name, id and description of your driver
+# Setup
 
-In the very beginning let's get this child a name. There are a few places you are required to change, and others are up to you to decide.
+Use the visual studio code extension manager and:
 
-- Required changes
+1. Install vscode-sqltools
+2. Install sqltools-teradata-driver
 
-  - `package.json`, you need to set a this properties as you like to make you package look good on VSCode Marketplace.
-    These are the bare bones of the extension.
+# Development
 
-  ```
-  "name": "driver-template",
-  "displayName": "Driver Template",
-  "publisher": "mtxr",
-  ```
+If you'd like to contribute please feel free.
 
-- Optional changes
-  - `src/contants.ts`, you can use different values here if you want
-  - `src/extension.ts`, this is where your driver is bootstraped and attached to SQLTools. You can customize as needed.
+1. Clone this repository and open it in VS Code.
+2. Change your git branch to a meaningfully named branch for your development goal.
+3. Run npm install to install dependencies.
+4. Press F5 to start a debuging session. This opens a new VS Code window with a development version of the driver extension loaded. Output from the extension with your local changes shows up in the Debug Console, with console output showing in the new window. You can set break points, step through your code, and inspect variables either in the Debug view or the Debug Console (somewhat, I could only get the extension.ts file to connect to the debug host correctly).
+5. Once your changes are made, create a PR back to the repository. If you've never created a PR, [github's documentation](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) is pretty extensive.
 
-You can now go to your terminal emulator and start the extension compiling process with:
-
-```
-yarn run watch # or npm run watch
-```
-
-For an overview on how to create VScode extensions, refer to VSCode guide at [](https://code.visualstudio.com/api/get-started/your-first-extension).
-
-### 2. Tell SQLTools how to query with you driver
-
-Now we will be updating `src/ls/driver.ts` and `src/ls/queries.ts`. Here is where the magic happens.
-
-`src/ls/driver.ts` is where we do the code to query the desired database, for example, where you would be using `node-pg` to
-guide SQLTools to get Postgres results. Please take a look in the file, there are further comments there.
-
-`src/ls/queries.ts` is the file where your base queries are stored. This file is not required, but having those queries split from `driver.ts`
-help us to keep the code organized.
-
-Check those files and try to update accortdingly to your needs.
-
-### 3. Creating connection schema for the assistant
-
-We are using `@rjsf/core` to render the forms, so in order to add you driver to the connection assistant,
-edit `connection.schema.json` and `ui.schema.json`.
-
-See https://react-jsonschema-form.readthedocs.io/en/latest/ for more instructions.
-
-### 4. Create icons
-
-You should create three icons for your extension to show up correctly on SQLTools with this requirements:
-
-- Must be PNG Images
-- Size 64x64px
-- Have no margins and no paddings
-- Connection state icons:
-  - Connected but not active: 64x64px PNG image, opacity set to 100%. See `icons/default.png`
-  - Connected and active: 64x64px PNG image, opacity set to 100%, have a green (#00FF00) circle 24x24 bottom right. See `icons/active.png`
-  - Diconnected/Inactive icon: Same icon as default state, but with 50% opacity. See `icons/inactive.png`
-- Put your icons at `icons/` directory
-- Ensure your icons are correctly mapped on `src/extension.ts`
-
-### 5. Edit this README
-
-Add instructions for your users about this driver usage, how to get started, how to setup, require etc.
-
-### 6. Publish the driver
-
-Time to publish your driver!
-
-Please refer to https://code.visualstudio.com/api/working-with-extensions/publishing-extension for detailed instructions.
-
-After publishing, open a PR in https://github.com/mtxr/vscode-sqltools to add you driver to the list of supported drivers!
-
-All set! Yay!
+Please make at least one commit per feature/fix. Please avoid large commits with a large list of changes, it makes it easier to review code changes and understand what's done.
