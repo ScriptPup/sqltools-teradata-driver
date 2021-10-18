@@ -1,6 +1,28 @@
+<!-- @format -->
+
 # SQLTools Teradata Driver
 
 This package is part of vscode-sqltools extension.
+
+# Known Issues and Fixed
+
+## Dynamic Linking Error
+
+Due to how the official teradata-nodejs-driver driver being badly packaged and maintained, the plugin may fail with `Error: Dynamic Linking Error: Win32 error 126`.
+This is due to a known bug with a PR that's been open for almost a year (as of writing).
+
+### Workarounds
+
+There are two ways to workaround this issue.
+
+1. Install the teradata-nodejs-driver anywhere with npm, then add the root folder (outside of the node_modules folder) to your environment PATH.
+2. Install the teradata-nodejs-driver globally. The second is somewhat simpler so I would recommend this. Plus, then once the maintainer finally accepts the PR, users can simply run `npm uninstall teradata-nodejs-driver -g` to remove the extra package.
+
+I did have some trouble installing the teradata-nodejs-driver on older versions of nodejs. I recommend running the install after updating to at least version 14.18.1.
+
+References:
+
+- teradata-nodejs-driver bug: https://github.com/Teradata/nodejs-driver/issues/1
 
 # Changelog
 
