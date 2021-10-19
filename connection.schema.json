@@ -28,20 +28,32 @@
       "title": "Password",
       "type": "string",
       "minLength": 1
+    },
+    "encryptdata": {
+      "title": "Encrypt Data",
+      "type": "boolean",
+      "default": true
     }
   },
   "properties": {
-    "logmech": {
-      "title": "Login Mechanism",
-      "type": "string",
-      "minLength": 1,
-      "enum": ["TD2", "LDAP", "KRB5", "TDNEGO"],
-      "default": "TD2"
-    },
     "server": { "$ref": "#/definitions/server" },
     "port": { "$ref": "#/definitions/port" },
     "username": { "$ref": "#/definitions/username" },
-    "usePassword": { "$ref": "#/definitions/usePassword" }
+    "usePassword": { "$ref": "#/definitions/usePassword" },
+    "tdsqloptions": {
+      "title": "Teradata driver connection options",
+      "type": "object",
+      "properties": {
+        "logmech": {
+          "title": "Login Mechanism",
+          "type": "string",
+          "minLength": 1,
+          "enum": ["TD2", "LDAP", "KRB5", "TDNEGO"],
+          "default": "TD2"
+        },
+        "encryptdata": { "$ref": "#/definitions/encryptdata" }
+      }
+    }
   },
   "dependencies": {
     "usePassword": {

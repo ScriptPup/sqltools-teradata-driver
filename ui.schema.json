@@ -13,6 +13,9 @@
   "tdsqloptions": {
     "logmech": {
       "ui:help": "The login mechanism used to connect to Teradata server"
+    },
+    "encryptdata": {
+      "ui:help": "Whether or not to connect with encryption."
     }
   }
 }

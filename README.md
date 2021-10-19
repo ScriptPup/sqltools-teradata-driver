@@ -26,6 +26,11 @@ References:
 
 # Changelog
 
+## 0.2.0
+
+- Moved logmech into teradata specific form section
+- Added encryption option
+
 ## 0.1.0
 
 - First working version

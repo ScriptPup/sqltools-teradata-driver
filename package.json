@@ -2,13 +2,14 @@
   "name": "sqltools-teradata-driver",
   "displayName": "SQLTools Teradata Driver",
   "description": "VSCode SQLTools teradata driver",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.42.0"
   },
   "publisher": "ScriptPup",
   "license": "MIT",
   "repository": {
+    "type": "git",
     "url": "https://github.com/ScriptPup/sqltools-teradata-driver/"
   },
   "bugs": {
