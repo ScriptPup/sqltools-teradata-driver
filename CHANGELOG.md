@@ -2,9 +2,10 @@
 
 # Changelog
 
-## 0.3.1
+## 0.3.1, 0.3.2
 
 - Fix early host lookup failure breaking COP in some situations
+- Change truth check method
 
 ## 0.3.0
 
