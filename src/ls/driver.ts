@@ -64,7 +64,8 @@ export default class TeraDriver
       user: this.credentials.username,
       password: this.credentials.password,
       host: this.credentials.server,
-      logmech: this.credentials.logmech,
+      logmech: this.credentials.tdsqloptions.logmech,
+      encryptdata: this.credentials.tdsqloptions.encryptdata,
       dbs_port: this.credentials.port.toString(),
     };
     try {
