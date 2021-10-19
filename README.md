@@ -24,17 +24,6 @@ References:
 
 - teradata-nodejs-driver bug: https://github.com/Teradata/nodejs-driver/issues/1
 
-# Changelog
-
-## 0.2.0
-
-- Moved logmech into teradata specific form section
-- Added encryption option
-
-## 0.1.0
-
-- First working version
-
 # Setup
 
 Use the visual studio code extension manager and:

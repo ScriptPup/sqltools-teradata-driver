@@ -11,6 +11,7 @@ import {
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
+import { teradata_cop_connect } from "./teradata-connect";
 
 /**
  * set Driver lib to the type of your connection.
@@ -67,17 +68,14 @@ export default class TeraDriver
       encryptdata: this.credentials.tdsqloptions.encryptdata.toString(),
       dbs_port: this.credentials.port.toString(),
     };
-    try {
-      const connection: TeradataConnector.TeradataConnection = new TeradataConnector.TeradataConnection();
-      connection.connect(connector_params);
-      this.connection = Promise.resolve(connection);
-    } catch (e) {
-      console.error("Failed to connect with errors");
-      console.error(e);
-      throw "Failed to open connection";
-    }
-    console.debug("Connection to Teradata established");
-    return this.connection;
+    this.connection = Promise.resolve(
+      await teradata_cop_connect(connector_params).catch((e) => {
+        console.error("Failed to connect with errors");
+        console.error(e);
+        throw "Failed to open connection";
+      })
+    );
+    return Promise.resolve(this.connection);
   }
 
   public async close() {
