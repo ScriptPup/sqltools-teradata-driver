@@ -59,13 +59,12 @@ export default class TeraDriver
     if (this.connection) {
       return this.connection;
     }
-
     const connector_params: TeradataConnector.ITDConnParams = {
       user: this.credentials.username,
       password: this.credentials.password,
       host: this.credentials.server,
       logmech: this.credentials.tdsqloptions.logmech,
-      encryptdata: this.credentials.tdsqloptions.encryptdata,
+      encryptdata: this.credentials.tdsqloptions.encryptdata.toString(),
       dbs_port: this.credentials.port.toString(),
     };
     try {
