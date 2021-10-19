@@ -2,6 +2,10 @@
 
 # Changelog
 
+## 0.3.1
+
+- Fix early host lookup failure breaking COP in some situations
+
 ## 0.3.0
 
 - Add Teradata COP support

@@ -8,7 +8,14 @@ const resolve_cop = async (host: string): Promise<string[]> => {
   const host_prefix = host_parts.shift();
   const host_suffix = host_parts.join(".");
   const host_list: string[] = new Array();
-  const use_cop = !!(await dns.promises.lookup(host).catch());
+
+  let use_cop = false;
+  try {
+    await dns.promises.lookup(host);
+    use_cop = true;
+  } catch {
+    console.debug("Hostname provided isn't registered in DNS.");
+  }
 
   // If the host name provided exists by itself, then just connect with that
   // Or if the host name is an IP address then just connect with that
@@ -16,6 +23,10 @@ const resolve_cop = async (host: string): Promise<string[]> => {
     host_list.push(host as string);
     return host_list;
   }
+
+  console.debug(
+    "Hostname provided isn't an IP address either, attempting COP lookups."
+  );
 
   // Loop through hosts, adding a cop# suffix to the hostname prefix
   // Stop once no new hosts are found
