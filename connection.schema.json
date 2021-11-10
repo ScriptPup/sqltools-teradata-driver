@@ -40,6 +40,11 @@
     "port": { "$ref": "#/definitions/port" },
     "username": { "$ref": "#/definitions/username" },
     "usePassword": { "$ref": "#/definitions/usePassword" },
+    "itimeout": {
+      "title": "Intellisense Timeout",
+      "type": "number",
+      "default": 200
+    },
     "tdsqloptions": {
       "title": "Teradata driver connection options",
       "type": "object",

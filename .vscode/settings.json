@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "logmech": "TD2",
+            "port": 1025,
+            "previewLimit": 50,
+            "driver": "SQLTools Teradata Driver",
+            "server": "192.168.254.2",
+            "name": "Test",
+            "username": "dbc",
+            "password": "dbc"
+        }
+    ]
+}

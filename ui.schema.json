@@ -6,7 +6,8 @@
     "usePassword",
     "password",
     "tdsqloptions",
-    "askForPassword"
+    "askForPassword",
+    "itimeout"
   ],
   "password": { "ui:widget": "password" },
   "askForPassword": { "ui:widget": "hidden" },

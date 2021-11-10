@@ -12,6 +12,7 @@ import {
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
 import { teradata_cop_connect } from "./teradata-connect";
+import { ObjectCache } from "./objectCache";
 
 /**
  * set Driver lib to the type of your connection.
@@ -25,6 +26,14 @@ import { teradata_cop_connect } from "./teradata-connect";
  */
 type DriverLib = TeradataConnector.TeradataConnection;
 type DriverOptions = TeradataConnector.ITDConnParams;
+
+const resultsToChildren: any = (queryResults: any, cols: any[]) => {
+  return queryResults.map((result) => {
+    return result
+      .map((item, i) => ({ [cols[i]]: item }))
+      .reduce((json, val) => Object.assign({}, json, val));
+  });
+};
 
 export default class TeraDriver
   extends AbstractDriver<DriverLib, DriverOptions>
@@ -47,6 +56,10 @@ export default class TeraDriver
   // ];
 
   queries = queries;
+  private cache: ObjectCache = new ObjectCache({
+    driver: this,
+    queryResults: this.queryResults,
+  });
 
   /** if you need to require your lib in runtime and then
    * use `this.lib.methodName()` anywhere and vscode will take care of the dependencies
@@ -75,6 +88,11 @@ export default class TeraDriver
         throw "Failed to open connection";
       })
     );
+    this.cache.find({
+      itemType: ContextValue.DATABASE,
+      search: "",
+      extraParams: {},
+    });
     return Promise.resolve(this.connection);
   }
 
@@ -86,14 +104,6 @@ export default class TeraDriver
     (await this.connection).close();
     this.connection = null;
   }
-
-  private resultsToChildren: any = (queryResults: any, cols: any[]) => {
-    return queryResults.map((result) => {
-      return result
-        .map((item, i) => ({ [cols[i]]: item }))
-        .reduce((json, val) => Object.assign({}, json, val));
-    });
-  };
 
   public query: typeof AbstractDriver["prototype"]["query"] = async (
     queries,
@@ -121,7 +131,7 @@ export default class TeraDriver
               message: `Query ok with ${queriesResults.length} results`,
             },
           ],
-          results: this.resultsToChildren(queriesResults, cols),
+          results: resultsToChildren(queriesResults, cols),
           query: query.toString(),
           requestId: opt.requestId,
           resultId: generateId(),
@@ -242,15 +252,39 @@ export default class TeraDriver
     search: string,
     extraParams: any = {}
   ): Promise<NSDatabase.SearchableItem[]> {
-    switch (itemType) {
-      case ContextValue.TABLE:
-        return this.queryResults(this.queries.searchTables({ search }));
-      case ContextValue.COLUMN:
-        console.debug("Searching for a column");
-        return this.queryResults(
-          this.queries.searchColumns({ search, ...extraParams })
-        );
+    try {
+      const res = this.cache.find({ itemType, search, extraParams });
+      res.then((r) => {
+        if (r.length > 0) {
+          console.log("Recieved results for intelisense query", r[0]);
+        }
+      });
+      return res;
+    } catch (e) {
+      console.error("Failed to search!", itemType, search, extraParams);
+      throw e;
     }
+
+    //   switch (itemType) {
+    //     case ContextValue.TABLE:
+    //       const res = this.queryResults(this.queries.searchTables({ search }));
+
+    //       res.then((r) => {
+    //         console.log("Result found 2!", r);
+    //       });
+    //       return res;
+    //     case ContextValue.COLUMN:
+    //       console.debug("Searching for a column");
+    //       const res2 = this.queryResults(
+    //         this.queries.searchColumns({ search, ...extraParams })
+    //       );
+    //       res2.then((r) => {
+    //         if(r.length > 0){
+    //           console.log("Result found 2!", r[0]);
+    //         }
+    //       });
+    //       return res2;
+    //   }
   }
 
   public getStaticCompletions: IConnectionDriver["getStaticCompletions"] = async () => {

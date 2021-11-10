@@ -12,6 +12,7 @@ const fetchDatabases: IBaseQueries["fetchDatabases"] = queryFactory`
     DatabaseName AS "label"
     ,DatabaseName as "name"
     ,DatabaseName AS "database"
+    ,NULL AS "parent"
     ,'${ContextValue.DATABASE}' AS "type"
     ,'database' AS "detail"
     ,'database' AS "iconId"
@@ -76,6 +77,7 @@ const searchTables: IBaseQueries["searchTables"] = queryFactory`
 SELECT 
   TableName AS "label"
   ,DataBaseName AS "parent"
+  ,'${ContextValue.TABLE}' AS "type"
 FROM dbc.tablesV
 WHERE 
   TableKind IN ('T','V')
@@ -97,9 +99,10 @@ ${(p) => {
 // `;
 
 const searchColumns: IBaseQueries["searchColumns"] = queryFactory`
-SELECT TOP ${(p) => p.limit || 10}
+SELECT TOP ${(p) => p.limit || 70}
   c.ColumnName as "label"
   ,c.TableName as "table"
+  ,c.TableName as "parent"
   ,${helper_ColTypeCASE} AS "dataType"
   ,C.Nullable AS "isNullable"
   ,NULL AS "isPk" 
@@ -107,7 +110,8 @@ SELECT TOP ${(p) => p.limit || 10}
 FROM dbc.columnsV AS C 
 WHERE 1 = 1
 ${(p) => {
-  console.log(p);
+  console.log("Columns search query props", p);
+  console.log("Table search list", p.tables);
   return "";
 }}
 ${(p) =>
@@ -123,8 +127,7 @@ ${(p) => {
   ];
   return p.search
     ? `AND (
-    LOWER(c.ColumnName || '.' || c.TableName) LIKE '%${term}%'
-    OR LOWER(c.ColumnName) LIKE '%${term}%'
+    LOWER(c.ColumnName) LIKE '${term}%'
   )`
     : "";
 }}
