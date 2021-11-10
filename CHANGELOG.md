@@ -2,6 +2,11 @@
 
 # Changelog
 
+# 0.3.3
+
+- Update teradata-nodejs-driver to 1.0.0-rc.5
+  - Removes need for global install
+
 ## 0.3.1, 0.3.2
 
 - Fix early host lookup failure breaking COP in some situations
