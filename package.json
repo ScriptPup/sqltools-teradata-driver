@@ -4,7 +4,7 @@
   "description": "VSCode SQLTools teradata driver",
   "version": "0.3.4",
   "engines": {
-    "vscode": "^1.42.0"
+    "vscode": ">=1.61"
   },
   "publisher": "ScriptPup",
   "license": "MIT",
