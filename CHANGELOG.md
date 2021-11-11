@@ -6,6 +6,7 @@
 
 - Update icon image to a higher resolution version
 - Change activation to prefered onStartupFinished rather than \*
+- Switch to platform specific packages to support the different native libs required depending host OS
 
 # 0.3.3
 
