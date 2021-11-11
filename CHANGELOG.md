@@ -2,6 +2,11 @@
 
 # Changelog
 
+# 0.3.4
+
+- Update icon image to a higher resolution version
+- Change activation to prefered onStartupFinished rather than \*
+
 # 0.3.3
 
 - Update teradata-nodejs-driver to 1.0.0-rc.5

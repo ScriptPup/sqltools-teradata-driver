@@ -2,7 +2,7 @@
   "name": "sqltools-teradata-driver",
   "displayName": "SQLTools Teradata Driver",
   "description": "VSCode SQLTools teradata driver",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "engines": {
     "vscode": "^1.42.0"
   },
@@ -20,6 +20,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "package": "vsce package",
+    "publish": "vsce publish",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
@@ -38,7 +39,7 @@
     "mtxr.sqltools"
   ],
   "activationEvents": [
-    "*",
+    "onStartupFinished",
     "onLanguage:sql",
     "onCommand:sqltools.*"
   ],
