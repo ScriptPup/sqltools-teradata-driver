@@ -20,7 +20,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "package": "vsce package",
-    "publish": "vsce publish",
+    "publish": "vsce publish --target win32-x64 linux-x64 darwin-x64",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
