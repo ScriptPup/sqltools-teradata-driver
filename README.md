@@ -2,14 +2,9 @@
 
 # SQLTools Teradata Driver
 
-This package is part of vscode-sqltools extension.
+This SQLTools-based extension supports Teradata databases. Using this extension you can browse databases, tables, views, run queries, export results to CSV and JSON files. Stay connected to multiple Teradata instances at the same time. View query history, bookmark frequently used queries. The extension supports multiple authentication mechanisms including: native database, LDAP, TDNEGO and Kerberos. 
 
-# Setup
-
-Use the visual studio code extension manager and:
-
-1. Install vscode-sqltools
-2. Install sqltools-teradata-driver
+![](https://raw.githubusercontent.com/scriptpup/sqltools-teradata-driver/master/resources/preview-sqltools-teradata-driver.gif)
 
 # Development
 

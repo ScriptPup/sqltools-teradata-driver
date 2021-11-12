@@ -2,6 +2,10 @@
 
 # Changelog
 
+# 0.3.7
+
+- Improve the README doc.
+
 # 0.3.6
 
 - Use github actions to build and publish platform specific extension.
