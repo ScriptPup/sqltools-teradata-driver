@@ -2,6 +2,10 @@
 
 # Changelog
 
+# 0.3.6
+
+- Use github actions to build and publish platform specific extension.
+
 # 0.3.5
 
 - Switch to platform specific packages to support the different native libs required depending host OS
