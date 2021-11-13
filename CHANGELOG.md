@@ -2,6 +2,10 @@
 
 # Changelog
 
+# 0.3.8
+
+- Republish improved readme, extension marketplace not updating same-publish as documentation change.
+
 # 0.3.7
 
 - Improve the README doc.
