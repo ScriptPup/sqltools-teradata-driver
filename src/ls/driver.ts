@@ -11,7 +11,7 @@ import {
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
-import { teradata_cop_connect } from "./teradata-connect";
+import { teradata_connect } from "./teradata-connect";
 
 /**
  * set Driver lib to the type of your connection.
@@ -28,7 +28,8 @@ type DriverOptions = TeradataConnector.ITDConnParams;
 
 export default class TeraDriver
   extends AbstractDriver<DriverLib, DriverOptions>
-  implements IConnectionDriver {
+  implements IConnectionDriver
+{
   /**
    * If you driver depends on node packages, list it below on `deps` prop.
    * It will be installed automatically on first use of your driver.
@@ -69,7 +70,7 @@ export default class TeraDriver
       dbs_port: this.credentials.port.toString(),
     };
     this.connection = Promise.resolve(
-      await teradata_cop_connect(connector_params).catch((e) => {
+      await teradata_connect(connector_params).catch((e) => {
         console.error("Failed to connect with errors");
         console.error(e);
         throw "Failed to open connection";
@@ -253,7 +254,8 @@ export default class TeraDriver
     }
   }
 
-  public getStaticCompletions: IConnectionDriver["getStaticCompletions"] = async () => {
-    return {}; // This works very badly/slowly. It's probably not worth having it.
-  };
+  public getStaticCompletions: IConnectionDriver["getStaticCompletions"] =
+    async () => {
+      return {}; // This works very badly/slowly. It's probably not worth having it.
+    };
 }
