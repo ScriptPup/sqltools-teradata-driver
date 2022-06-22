@@ -16,6 +16,9 @@
     },
     "encryptdata": {
       "ui:help": "Whether or not to connect with encryption."
+    },
+    "tmode": {
+      "ui:help": "The mode used to connect to Teradata server"
     }
   }
 }
