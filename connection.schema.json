@@ -51,7 +51,14 @@
           "enum": ["TD2", "LDAP", "KRB5", "TDNEGO"],
           "default": "TD2"
         },
-        "encryptdata": { "$ref": "#/definitions/encryptdata" }
+        "encryptdata": { "$ref": "#/definitions/encryptdata" },
+        "tmode": {
+          "title": "Connection Mode",
+          "type": "string",
+          "minLength": 1,
+          "enum": ["ANSI", "TERA"],
+          "default": "ANSI"
+        }
       }
     }
   },

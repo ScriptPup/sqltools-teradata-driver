@@ -68,6 +68,7 @@ export default class TeraDriver
       logmech: this.credentials.tdsqloptions.logmech,
       encryptdata: this.credentials.tdsqloptions.encryptdata.toString(),
       dbs_port: this.credentials.port.toString(),
+      tmode: this.credentials.tdsqloptions.tmode,
     };
     this.connection = Promise.resolve(
       await teradata_connect(connector_params).catch((e) => {
