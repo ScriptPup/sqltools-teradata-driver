@@ -51,7 +51,7 @@
     "keytar": "^7.7.0",
     "node-gyp": "^8.2.0",
     "ref-array-di": "^1.2.2",
-    "teradata-nodejs-driver": "^1.0.0-rc.5",
+    "teradata-nodejs-driver": "^1.0.0-rc.15",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
