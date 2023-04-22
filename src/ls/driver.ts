@@ -8,6 +8,7 @@ import {
   NSDatabase,
   ContextValue,
   Arg0,
+  IExpectedResult,
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
@@ -173,20 +174,32 @@ export default class TeraDriver
       case ContextValue.VIEW:
         return this.getColumns(item as NSDatabase.ITable);
       case ContextValue.DATABASE:
-        return <MConnectionExplorer.IChildItem[]>[
-          {
-            label: "Tables",
-            type: ContextValue.RESOURCE_GROUP,
-            iconId: "folder",
-            childType: ContextValue.TABLE,
-          },
-          {
-            label: "Views",
-            type: ContextValue.RESOURCE_GROUP,
-            iconId: "folder",
-            childType: ContextValue.VIEW,
-          },
-        ];
+        return new Promise<MConnectionExplorer.IChildItem[]>(
+          async (resolve) => {
+            const dbs = await this.queryResults(
+              this.queries.fetchChildDatabases(item)
+            );
+            resolve([
+              {
+                label: "Tables",
+                type: ContextValue.RESOURCE_GROUP,
+                iconId: "folder",
+                childType: ContextValue.TABLE,
+                schema: item.schema,
+                database: item.database,
+              },
+              {
+                label: "Views",
+                type: ContextValue.RESOURCE_GROUP,
+                iconId: "folder",
+                childType: ContextValue.VIEW,
+                schema: item.schema,
+                database: item.database,
+              },
+              ...dbs,
+            ]);
+          }
+        );
       case ContextValue.RESOURCE_GROUP:
         return this.getChildrenForGroup({ item, parent });
     }
