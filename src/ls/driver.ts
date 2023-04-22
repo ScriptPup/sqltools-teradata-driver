@@ -8,7 +8,6 @@ import {
   NSDatabase,
   ContextValue,
   Arg0,
-  IExpectedResult,
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
@@ -169,7 +168,11 @@ export default class TeraDriver
     switch (item.type) {
       case ContextValue.CONNECTION:
       case ContextValue.CONNECTED_CONNECTION:
-        return this.queryResults(this.queries.fetchDatabases());
+        return this.queryResults(
+          this.credentials.tdsqlpreferences.showuserdbs
+            ? this.queries.fetchDatabasesAndUsers()
+            : this.queries.fetchDatabases()
+        );
       case ContextValue.TABLE:
       case ContextValue.VIEW:
         return this.getColumns(item as NSDatabase.ITable);
@@ -177,7 +180,9 @@ export default class TeraDriver
         return new Promise<MConnectionExplorer.IChildItem[]>(
           async (resolve) => {
             const dbs = await this.queryResults(
-              this.queries.fetchChildDatabases(item)
+              this.credentials.tdsqlpreferences.showuserdbs
+                ? this.queries.fetchChildDatabasesAndUsers(item)
+                : this.queries.fetchChildDatabases(item)
             );
             resolve([
               {

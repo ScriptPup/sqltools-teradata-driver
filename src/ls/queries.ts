@@ -22,6 +22,21 @@ const fetchDatabases: IBaseQueries["fetchDatabases"] = queryFactory`
   ;
 `;
 
+const fetchDatabasesAndUsers: IBaseQueries["fetchDatabases"] = queryFactory`
+  SELECT 
+    DatabaseName AS "label"
+    ,DatabaseName as "name"
+    ,DatabaseName AS "database"
+    ,'${ContextValue.DATABASE}' AS "type"
+    ,'database' AS "detail"
+    ,'database' AS "iconId"
+  FROM DBC.DBase
+  WHERE 
+    RowType IN ('D','U')
+    AND OwnerName = 'DBC' --"Root" level databases only, don't pull nested DBs here
+  ;
+`;
+
 const fetchChildDatabases: IBaseQueries["fetchChildDatabases"] = queryFactory`
   SELECT 
     DatabaseName AS "label"
@@ -33,6 +48,22 @@ const fetchChildDatabases: IBaseQueries["fetchChildDatabases"] = queryFactory`
     FROM DBC.DBase
   WHERE 
   RowType = 'D'
+  AND OwnerName = '${(p: any) =>
+    p.label}' -- Only get children of the selected parent
+  AND OwnerName <> 'DBC' -- Do not include "top" level databases
+`;
+
+const fetchChildDatabasesAndUsers: IBaseQueries["fetchChildDatabases"] = queryFactory`
+  SELECT 
+    DatabaseName AS "label"
+    ,DatabaseName as "name"
+    ,DatabaseName AS "database"
+    ,'${ContextValue.DATABASE}' AS "type"
+    ,'database' AS "detail"
+    ,'database' AS "iconId"
+    FROM DBC.DBase
+  WHERE 
+  RowType IN ('D','U')
   AND OwnerName = '${(p: any) =>
     p.label}' -- Only get children of the selected parent
   AND OwnerName <> 'DBC' -- Do not include "top" level databases
@@ -152,7 +183,9 @@ ORDER BY c.ColumnName ASC;
 
 export default {
   fetchDatabases,
+  fetchDatabasesAndUsers,
   fetchChildDatabases,
+  fetchChildDatabasesAndUsers,
   describeTable,
   countRecords,
   fetchColumns,
