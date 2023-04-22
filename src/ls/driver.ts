@@ -12,6 +12,14 @@ import {
 import { v4 as generateId } from "uuid";
 import * as TeradataConnector from "teradata-nodejs-driver";
 import { teradata_connect } from "./teradata-connect";
+import {
+  InterfaceError,
+  DatabaseError,
+  DataError,
+  IntegrityError,
+  OperationalError,
+  ProgrammingError,
+} from "teradata-nodejs-driver/teradata-exceptions";
 
 /**
  * set Driver lib to the type of your connection.
@@ -110,25 +118,45 @@ export default class TeraDriver
         if (query.length < 1) {
           continue;
         }
-        const cursor = (await this.connection).cursor();
-        cursor.execute(query as string);
-        const queriesResults = cursor.fetchall();
-        const cols = cursor.description.map((x) => x[0]);
-        resultsAgg.push({
-          cols: cols,
-          connId: this.getId(),
-          messages: [
-            {
-              date: new Date(),
-              message: `Query ok with ${queriesResults.length} results`,
-            },
-          ],
-          results: this.resultsToChildren(queriesResults, cols),
-          query: query.toString(),
-          requestId: opt.requestId,
-          resultId: generateId(),
-        });
-
+        try {
+          const cursor = (await this.connection).cursor();
+          cursor.execute(query as string);
+          const queriesResults = cursor.fetchall();
+          const cols = cursor.description.map((x) => x[0]);
+          resultsAgg.push({
+            cols: cols,
+            connId: this.getId(),
+            messages: [
+              {
+                date: new Date(),
+                message: `Query ok with ${queriesResults.length} results`,
+              },
+            ],
+            results: this.resultsToChildren(queriesResults, cols),
+            query: query.toString(),
+            requestId: opt.requestId,
+            resultId: generateId(),
+          });
+        } catch (err) {
+          const error:
+            | InterfaceError
+            | DatabaseError
+            | DataError
+            | IntegrityError
+            | OperationalError
+            | ProgrammingError = err;
+          resultsAgg.push({
+            connId: this.getId(),
+            requestId: opt.requestId,
+            resultId: generateId(),
+            cols: [],
+            messages: [prepareErrorMessage(error)],
+            error: true,
+            rawError: err,
+            query,
+            results: [],
+          });
+        }
         /**
          * write the method to execute queries here!!
          */
@@ -278,3 +306,16 @@ export default class TeraDriver
       return {}; // This works very badly/slowly. It's probably not worth having it.
     };
 }
+
+const prepareErrorMessage = (error: Error): { message: string; date: Date } => {
+  const stackPieces = /^\s*at.+/;
+  const relevantMessage: string = error.message
+    .split(/(\r\n|\r|\n)/)
+    .filter((r) => !r.match(stackPieces))
+    .join("\n")
+    .trimEnd();
+  return {
+    message: `${error.constructor.name}: ${relevantMessage}`,
+    date: new Date(),
+  };
+};
