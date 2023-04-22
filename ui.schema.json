@@ -5,6 +5,7 @@
     "username",
     "usePassword",
     "password",
+    "tdsqlpreferences",
     "tdsqloptions",
     "askForPassword"
   ],
