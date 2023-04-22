@@ -33,6 +33,11 @@
       "title": "Encrypt Data",
       "type": "boolean",
       "default": true
+    },
+    "showuserdbs": {
+      "title": "Show Users as DBs",
+      "type": "boolean",
+      "default": false
     }
   },
   "properties": {
@@ -40,6 +45,13 @@
     "port": { "$ref": "#/definitions/port" },
     "username": { "$ref": "#/definitions/username" },
     "usePassword": { "$ref": "#/definitions/usePassword" },
+    "tdsqlpreferences": {
+      "title": "Connection preferences",
+      "type": "object",
+      "properties": {
+        "showuserdbs": { "$ref": "#/definitions/showuserdbs" }
+      }
+    },
     "tdsqloptions": {
       "title": "Teradata driver connection options",
       "type": "object",
