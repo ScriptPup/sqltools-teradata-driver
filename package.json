@@ -2,7 +2,7 @@
   "name": "sqltools-teradata-driver",
   "displayName": "SQLTools Teradata Driver",
   "description": "VSCode SQLTools teradata driver",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "engines": {
     "vscode": ">=1.61.0"
   },
@@ -47,17 +47,17 @@
   "dependencies": {
     "@sqltools/base-driver": "latest",
     "@sqltools/types": "latest",
-    "ffi-napi": "^4.0.3",
-    "keytar": "^7.7.0",
-    "node-gyp": "^8.2.0",
-    "ref-array-di": "^1.2.2",
     "teradata-nodejs-driver": "^1.0.0-rc.15",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.5.5",
     "@types/node": "^14.0.9",
-    "@types/vscode": "^1.42.0",
-    "typescript": "^3.7.3"
+    "@types/vscode": "1.54.0",
+    "node-gyp": "^8.2.0",
+    "typescript": "^3.9.10",
+    "vscode-jsonrpc": "6.0.0",
+    "vscode-languageserver-protocol": "3.16.0",
+    "vscode-languageserver-types": "3.16.0"
   }
 }
