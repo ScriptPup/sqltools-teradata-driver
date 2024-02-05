@@ -47,7 +47,7 @@
   "dependencies": {
     "@sqltools/base-driver": "latest",
     "@sqltools/types": "latest",
-    "teradata-nodejs-driver": "^1.0.0-rc.15",
+    "@teradataprebuilt/januspreview": "^17.20.0-rc.26",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
