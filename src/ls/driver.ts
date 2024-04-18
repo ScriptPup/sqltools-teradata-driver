@@ -10,7 +10,7 @@ import {
   Arg0,
 } from "@sqltools/types";
 import { v4 as generateId } from "uuid";
-import * as TeradataConnector from "teradata-nodejs-driver";
+import * as TeradataConnector from "teradatasql";
 import { teradata_connect } from "./teradata-connect";
 import {
   InterfaceError,
@@ -19,7 +19,7 @@ import {
   IntegrityError,
   OperationalError,
   ProgrammingError,
-} from "teradata-nodejs-driver/teradata-exceptions";
+} from "teradatasql/lib/teradata-exceptions";
 
 /**
  * set Driver lib to the type of your connection.

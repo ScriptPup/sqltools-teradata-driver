@@ -1,6 +1,6 @@
 /** @format */
 
-import * as TeradataConnector from "teradata-nodejs-driver";
+import * as TeradataConnector from "teradatasql";
 
 const teradata_connect_one = (connector_params) => {
   const connection: TeradataConnector.TeradataConnection =
