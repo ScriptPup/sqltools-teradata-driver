@@ -2,7 +2,7 @@
   "name": "sqltools-teradata-driver",
   "displayName": "SQLTools Teradata Driver",
   "description": "VSCode SQLTools teradata driver",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "engines": {
     "vscode": ">=1.61.0"
   },
@@ -47,6 +47,7 @@
   "dependencies": {
     "@sqltools/base-driver": "latest",
     "@sqltools/types": "latest",
+    "@vscode/vsce": "^2.27.0",
     "teradatasql": "^20.0.10",
     "uuid": "^7.0.2"
   },
