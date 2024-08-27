@@ -2,6 +2,10 @@
 
 # Changelog
 
+# 0.6.0
+
+- Fix native libraries needed by the Teradata driver.
+
 # 0.3.8
 
 - Republish improved readme, extension marketplace not updating same-publish as documentation change.
