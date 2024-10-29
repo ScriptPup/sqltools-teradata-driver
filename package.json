@@ -48,7 +48,7 @@
     "@sqltools/base-driver": "latest",
     "@sqltools/types": "latest",
     "@vscode/vsce": "^2.27.0",
-    "teradatasql": "^20.0.10",
+    "teradatasql": "^20.0.20",
     "uuid": "^7.0.2"
   },
   "devDependencies": {

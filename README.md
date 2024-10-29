@@ -2,10 +2,6 @@
 
 # SQLTools Teradata Driver
 
->[!IMPORTANT]
-> To use this extension in VS Code 1.77 and above, set `sqltools.useNodeRuntime` setting to `true`. 
-> Without the setting, the extension will not initialize as the database driver will fail to load and throw a native error instead.
-
 This SQLTools-based extension supports Teradata databases. Using this extension you can browse databases, tables, views, run queries, export results to CSV and JSON files. Stay connected to multiple Teradata instances at the same time. View query history, bookmark frequently used queries. The extension supports multiple authentication mechanisms including: native database, LDAP, TDNEGO and Kerberos. 
 
 ![](https://raw.githubusercontent.com/scriptpup/sqltools-teradata-driver/master/resources/preview-sqltools-teradata-driver.gif)
