@@ -2,6 +2,10 @@
 
 # Changelog
 
+# 0.7.0
+
+- Update the teradata driver to version 20.0.20 which fixes memory conflicts with Electron. External node.js instance is no longer required.
+
 # 0.6.0
 
 - Fix native libraries needed by the Teradata driver.
